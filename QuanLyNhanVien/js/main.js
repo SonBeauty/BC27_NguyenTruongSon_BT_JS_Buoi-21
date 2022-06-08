@@ -1,4 +1,23 @@
 var employees = []
+init()
+function init() {
+    // B1: lấy data từ localStorage
+    employees = JSON.parse(localStorage.getItem("employees")) || [];
+
+    for (var i = 0; i < employees.length; i++) {
+        var employee = employees[i]
+        employees[i] = new Employee(
+            employee.account,
+            employee.name,
+            employee.email,
+            employee.startingDate,
+            employee.position,
+            employee.basicSalary,
+            employee.workingTime
+        )
+    }
+    display(employees)
+}
 
 function addEmployee() {
     //B1: DOM lấy value
@@ -13,9 +32,9 @@ function addEmployee() {
 
     console.log(name)
     var isValid = validation()
-    if(!isValid){
+    if (!isValid) {
         alert("vui lòng nhập các giá trị")
-        
+
         return;
     }
 
@@ -25,6 +44,10 @@ function addEmployee() {
     var employee = new Employee(account, name, email, password, startingDate, basicSalary, position, workingTime)
     employees.push(employee)
     console.log(name);
+
+    //lưu thông tin mảng employees xuống localstorage
+    localStorage.setItem('employees', JSON.stringify((employees)))
+
     display(employees)
 
 }
@@ -85,58 +108,92 @@ function validation() {
     var password = document.getElementById("password").value
     var startingDate = document.getElementById("datepicker").value
     var basicSalary = +document.getElementById("luongCB").value
-    var position = +document.getElementById("chucvu").value
+    var position = document.getElementById("chucvu").value
     var workingTime = +document.getElementById("gioLam").value
 
     var isValid = true
 
     // Hàm kiểm tra input có rỗng hay không
+
+    // kiểm tra kí tự 
+    var reg = new RegExp('^[0-9]+$');
     if (!isRequired(account)) {
         isValid = false
         document.getElementById('tbTKNV').innerHTML = "Tài khoản không được để trống"
-        console.log(isValid);
-    }
+    }//else if(!(minLength(account, 4)||maxLength(account,6))){
+    //     console.log(account.length)
+    //     isValid = false
+    //     document.getElementById('tbTKNV').innerHTML = "Tài khoản từ 4-6 kí tự"
+    // } else if (reg.test(account)) {
+    //     isValid = false
+    //     document.getElementById('tbTen').innerHTML = "Tài khoản chứa kí tự không hợp lệ"
+    // }
+
+
+    var letters = new RegExp("[A-Za-z]+$")
     if (!isRequired(name)) {
         isValid = false
         document.getElementById('tbTen').innerHTML = "Tên nhân viên không được để trống"
-        console.log(isValid);
+
+    } else if (!minLength(name, 8)) {
+        isValid = false;
+        document.getElementById("tbTen").innerHTML = "Tên SV có ít nhất 8 kí tự"
+    } else if (letters.test(name)) {
+        isValid = false;
+        document.getElementById("tbTen").innerHTML = "Tên sinh viên có kí tự không hợp lệ"
     }
+
     if (!isRequired(email)) {
         isValid = false
         document.getElementById('tbEmail').innerHTML = "email nhân viên không được để trống"
-        console.log(isValid);
+
     }
     if (!isRequired(password)) {
         isValid = false
         document.getElementById('tbMatKhau').innerHTML = "Mật khẩu nhân viên không được để trống"
-        console.log(isValid);
+
     }
     if (!isRequired(startingDate)) {
         isValid = false
         document.getElementById('tbNgay').innerHTML = "Ngày làm không được để trống"
-        console.log(isValid);
+
     }
     if (!isRequired(basicSalary)) {
         isValid = false
         document.getElementById('tbLuongCB').innerHTML = "Lương cơ bản không được để trống"
-        console.log(isValid);
+
     }
     if (!isRequired(position)) {
         isValid = false
         document.getElementById('tbChucVu').innerHTML = "Chức vụ không được để trống"
-        console.log(isValid);
+
     }
     if (!isRequired(workingTime)) {
         isValid = false
         document.getElementById('tbGiolam').innerHTML = "Số giờ làm không được để trống"
-        console.log(isValid);
+
     }
 
     return isValid
 }
 
-function isRequired(value){
-    if (!value){
+function isRequired(value) {
+    if (!value) {
+        return false;
+    }
+
+    return true;
+}
+
+function minLength(value, limit) {
+    if (value.length < limit) {
+        return false;
+    }
+
+    return true;
+}
+function maxLength(value, max) {
+    if (value.length > max) {
         return false;
     }
 

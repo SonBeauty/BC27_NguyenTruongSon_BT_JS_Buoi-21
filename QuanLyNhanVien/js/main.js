@@ -49,6 +49,7 @@ function addEmployee() {
     localStorage.setItem('employees', JSON.stringify((employees)))
 
     display(employees)
+    reset()
 
 }
 
@@ -84,9 +85,13 @@ function deleteEmployee(account) {
         console.log(employees)
         employees.splice(index, 1)
 
+        // lưu thông tin vào local
+        localStorage.setItem('employees', JSON.stringify((employees)))
+
         display(employees)
     }
 }
+
 
 function findEmployee(account) {
     var index = -1
@@ -100,6 +105,23 @@ function findEmployee(account) {
     return index;
 }
 
+function reset(){
+    document.getElementById("tknv").value = ""
+    document.getElementById("name").value = ""
+    document.getElementById("email").value = ""
+    document.getElementById("password").value = ""
+    document.getElementById("datepicker").value = ""
+    document.getElementById("luongCB").value = ""
+    document.getElementById("chucvu").value = ""
+    document.getElementById("gioLam").value = ""
+    document.getElementById("tbTen").value = ""
+    document.getElementById("tbEmail").value = ""
+    document.getElementById("tbMatKhau").value = ""
+    document.getElementById("tbNgay").value = ""
+    document.getElementById("tbLuongCB").value = ""
+    document.getElementById("tbChucVu").value = ""
+
+}
 // Kiểm tra tính hợp lệ validation
 function validation() {
     var account = document.getElementById("tknv").value
@@ -130,6 +152,7 @@ function validation() {
     // }
 
 
+
     var letters = new RegExp("[A-Za-z]+$")
     if (!isRequired(name)) {
         isValid = false
@@ -138,7 +161,7 @@ function validation() {
     } else if (!minLength(name, 8)) {
         isValid = false;
         document.getElementById("tbTen").innerHTML = "Tên SV có ít nhất 8 kí tự"
-    } else if (letters.test(name)) {
+    } else if (!letters.test(name)) {
         isValid = false;
         document.getElementById("tbTen").innerHTML = "Tên sinh viên có kí tự không hợp lệ"
     }

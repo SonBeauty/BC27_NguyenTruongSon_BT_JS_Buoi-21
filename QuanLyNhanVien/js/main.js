@@ -161,7 +161,7 @@ function validation() {
     } else if (!minLength(name, 8)) {
         isValid = false;
         document.getElementById("tbTen").innerHTML = "Tên SV có ít nhất 8 kí tự"
-    } else if (!letters.test(name)) {
+    } else if (letters.test(name)) {
         isValid = false;
         document.getElementById("tbTen").innerHTML = "Tên sinh viên có kí tự không hợp lệ"
     }
